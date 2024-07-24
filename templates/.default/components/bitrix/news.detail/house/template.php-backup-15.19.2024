@@ -1,0 +1,535 @@
+<?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+$this->setFrameMode(true);
+?><!-- product-->
+<div class="product">
+    <div class="container">
+        <div class="product__grid">
+            <div class="product__header">
+                <h1 class="product__title"><?=$arResult['NAME'] . ' ' . $arResult['PROPERTIES']['SIZE']['VALUE'] . ' <span>' . $arResult['PROPERTIES']['ARTICLE']['VALUE'] . '</span>';?></h1>
+            </div>
+            <div class="product__left">
+                <!-- product-info-->
+                <div class="product-info">
+                    <div class="product-info__item"><span class="product-info__label">Площадь:</span>
+                        <p class="product-info__value"><?=$arResult['PROPERTIES']['PLOSHAD']['VALUE'];?> м&sup2;</p>
+                    </div>
+                    <div class="product-info__item"><span class="product-info__label">Этажность:</span>
+                        <p class="product-info__value"><?=$arResult['PROPERTIES']['ETAZHNOST']['VALUE'];?></p>
+                    </div>
+                    <div class="product-info__item"><span class="product-info__label">Размер:</span>
+                        <p class="product-info__value"><?=$arResult['PROPERTIES']['SIZE']['VALUE'];?> м</p>
+                    </div>
+                    <div class="product-info__item"><span class="product-info__label">Срок строительства:</span>
+                        <p class="product-info__value"><?=$arResult['PROPERTIES']['SROK']['VALUE'];?></p>
+                    </div>
+                    <div class="product-info__item"><span class="product-info__label">Комнат:</span>
+                        <p class="product-info__value"><?=$arResult['PROPERTIES']['KOMNAT']['VALUE'];?></p>
+                    </div>
+                    <div class="product-info__item"><span class="product-info__label">Санузлов:</span>
+                        <p class="product-info__value"><?=$arResult['PROPERTIES']['SANUZLOV']['VALUE'];?></p>
+                    </div>
+                </div>
+                <!-- end product-info-->
+                <!-- finance-->
+                <div class="finance">
+                    <div class="finance__grid">
+                        <?
+                        if ($arResult['PROPERTIES']['PRICE_DISCOUNT']['VALUE'])
+                        {
+                            $discount_percent = floor(100 - ($arResult['PROPERTIES']['PRICE_DISCOUNT']['VALUE'] * 100 / $arResult['PROPERTIES']['PRICE_STANDART']['VALUE']));
+                        }
+                        ?>
+
+                        <div class="finance__item">
+                            <div class="finance__label"><span>Стоимость дома</span></div>
+                            <div class="finance__value"><span><?=($arResult['PROPERTIES']['PRICE_DISCOUNT']['VALUE'] ? number_format($arResult['PROPERTIES']['PRICE_DISCOUNT']['VALUE'], 0, '.', ' ') : number_format($arResult['PROPERTIES']['PRICE_STANDART']['VALUE'], 0, '.', ' '));?> &#8381;</span></div>
+                        </div>
+                        <? if ($discount_percent): ?>
+                            <div class="finance__item">
+                                <div class="finance__label"><span>Скидка</span></div>
+                                <div class="finance__value"><span><?=$discount_percent;?>%</span></div>
+                            </div>
+                        <? endif; ?>
+                        <div class="finance__item">
+                            <div class="finance__label"><span>Выбор комплектации и заявка</span></div><a class="finance__btn js-modal-show-product" href="#equipment" data-id="<?=$arResult['ID'];?>"><span>ЗАЯВКА</span>
+                                <svg>
+                                    <use href="/img/icons/sprite.svg#arrow-down-icon"></use>
+                                </svg></a>
+                        </div>
+                    </div>
+                    <p class="finance__old"><span><?=number_format($arResult['PROPERTIES']['PRICE_STANDART']['VALUE'], 0, '.', ' ');?></span> &#8381;</p>
+                </div>
+                <!-- end finance-->
+                <!-- features-->
+                <div class="features">
+                    <div class="features__item">
+                        <div class="features__icon"><img src="/img/icons/shield_guaranty.svg" alt=""></div>
+                        <p class="features__text">5 лет гарантия <br> на строительство дома</p>
+                    </div>
+                    <div class="features__item">
+                        <div class="features__icon"><img src="/img/icons/sp_icon.svg" alt=""></div>
+                        <p class="features__text">Строим согласно СП 31-105</p>
+                    </div>
+                    <div class="features__item">
+                        <div class="features__icon"><img src="/img/icons/doski_coin_black.svg" alt=""></div>
+                        <p class="features__text">Пиломатериал камерной сушки</p>
+                    </div>
+                    <div class="features__item">
+                        <div class="features__icon"><img src="/img/icons/qualityt_icon_black.svg" alt=""></div>
+                        <p class="features__text">Контроль качества <br> на линии</p>
+                    </div>
+                    <div class="features__item">
+                        <div class="features__icon"><img src="/img/icons/worker_icon_black.svg" alt=""></div>
+                        <p class="features__text">Квалифицированные бригады</p>
+                    </div>
+                    <div class="features__item">
+                        <div class="features__icon"><img src="/img/icons/qualityt_icon_2.svg" alt=""></div>
+                        <p class="features__text">Качественные комплектующие дома</p>
+                    </div>
+                </div>
+                <!-- end features-->
+            </div>
+            <div class="product__right">
+                <!-- product-carousel-->
+                <div class="product-carousel">
+                    <?
+                    foreach ($arResult['PROPERTIES']['MORE_PHOTO']['VALUE'] as $arPhoto):
+                        $img = CFile::ResizeImageGet($arPhoto, array('width'=>800, 'height'=>800), BX_RESIZE_IMAGE_PROPORTIONAL, true);
+                        if (!$img) continue;
+                    ?>
+                        <div class="item"><a href="<?=CFILE::GetPath($arPhoto);?>" data-fancybox="product"><img src="<?=$img['src'];?>" alt=""></a></div>
+                    <? endforeach; ?>
+                </div>
+                <!-- end product-carousel-->
+            </div>
+            <div class="product__footer">
+                <!-- desc-->
+                <div class="desc">
+                    <h2 class="desc__title">О проекте</h2>
+                    <div class="desc__text">
+                        <?=$arResult['DETAIL_TEXT'];?>
+                    </div>
+                    <a class="desc__toggle" href="#"><span>Развернуть описание</span>
+                        <svg>
+                            <use href="/img/icons/sprite.svg#arrow-up"></use>
+                        </svg>
+                    </a>
+                </div>
+                <!-- end desc-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end product-->
+<!--include desc-->
+<!-- gallery-->
+<div class="gallery">
+    <div class="container">
+        <ul class="gallery__nav tabs-nav">
+            <li class="active"><a href="#tab1">Планировки</a></li>
+            <li>/</li>
+            <li><a href="#tab2">Все фасады</a></li>
+        </ul>
+    </div>
+    <div class="gallery__content">
+        <div class="gallery__tab tab active" id="tab1">
+            <? if ($arResult['PROPERTIES']['PLANS']['VALUE']): ?>
+                <div class="gallery__row">
+                    <?
+                    foreach ($arResult['PROPERTIES']['PLANS']['VALUE'] as $arPhoto):
+                        $img = CFile::ResizeImageGet($arPhoto, array('width'=>800, 'height'=>800), BX_RESIZE_IMAGE_PROPORTIONAL, true);
+                        if (!$img) continue;
+                    ?>
+                        <a class="gallery__item" href="<?=CFILE::GetPath($arPhoto);?>" data-fancybox="gallery1">
+                            <img src="<?=$img['src'];?>" alt="">
+                        </a>
+                    <? endforeach; ?>
+                </div>
+            <? endif; ?>
+        </div>
+        <div class="gallery__tab tab" id="tab2">
+            <? if ($arResult['PROPERTIES']['MORE_PHOTO']['VALUE']): ?>
+                <div class="gallery__row">
+                    <?
+                    foreach ($arResult['PROPERTIES']['MORE_PHOTO']['VALUE'] as $arPhoto):
+                        $img = CFile::ResizeImageGet($arPhoto, array('width'=>800, 'height'=>800), BX_RESIZE_IMAGE_PROPORTIONAL, true);
+                        if (!$img) continue;
+                        ?>
+                        <a class="gallery__item" href="<?=CFILE::GetPath($arPhoto);?>" data-fancybox="gallery1">
+                            <img src="<?=$img['src'];?>" alt="">
+                        </a>
+                    <? endforeach; ?>
+                </div>
+            <? endif; ?>
+        </div>
+    </div>
+</div>
+<!-- end gallery-->
+
+
+<!-- p-media-->
+<div class="p-media">
+    <div class="container">
+        <div class="p-media__row">
+            <? if ($arResult['PROPERTIES']['PANORAMA']['VALUE']): ?>
+                <div class="p-media__left">
+                    <p class="p-media__title">3D панорама дома</p><a href="<?=$arResult['PROPERTIES']['PANORAMA']['VALUE'];?>" data-fancybox><img src="<?=CFILE::GetPath($arResult['PROPERTIES']['PANORAMA_PREVIEW']['VALUE']);?>" alt=""></a>
+                </div>
+            <? endif; ?>
+            <? if ($arResult['REVIEWS']): ?>
+                <div class="p-media__right">
+                    <p class="p-media__title">Отзывы клиентов</p>
+                    <!-- reviews-->
+                    <div class="reviews">
+                        <? foreach ($arResult['REVIEWS'] as $arItem): ?>
+                            <a class="reviews__item" href="<?=$arItem['DETAIL_PAGE_URL'];?>">
+                                <div class="reviews__img">
+                                    <img src="<?=CFILE::GetPath($arItem['PREVIEW_PICTURE']);?>" alt="">
+                                </div>
+                                <p class="reviews__title"><?=$arItem['NAME'];?></p>
+                            </a>
+                        <? endforeach; ?>
+
+                    </div>
+                    <!-- end reviews-->
+                </div>
+            <? endif; ?>
+        </div>
+    </div>
+</div>
+<!-- end p-media-->
+
+
+<!-- p-finance-->
+<div class="p-finance">
+    <div class="p-finance__wrap">
+        <!-- hot-promo-->
+		<? /*
+        <div class="hot-promo">
+            <div class="container">
+                <div class="hot-promo__title">
+                    <div class="hot-promo__icon">
+                        <svg>
+                            <use href="/img/icons/sprite.svg#flame"></use>
+                        </svg>
+                    </div><span>АКЦИИ</span>
+                </div>
+                <div class="hot-promo__carousel">
+                    <? foreach ($arResult['AKCII'] as $arItem): ?>
+                        <div class="item">
+                            <a class="hot-promo__item" href="<?=$arItem['DETAIL_PAGE_URL'];?>">
+                                <div class="hot-promo__img"><img src="<?=CFILE::GetPath($arItem['PREVIEW_PICTURE']);?>" alt="">
+                                    <svg>
+                                        <use href="/img/icons/sprite.svg#flame-circle"></use>
+                                    </svg>
+                                </div>
+                                <div class="hot-promo__desc">
+                                    <p class="hot-promo__text"><?=$arItem['NAME'];?> <?=($arItem['PREVIEW_TEXT'] ? '<span>' . $arItem['PREVIEW_TEXT'] . '</span>' : '');?></p>
+                                    <svg>
+                                        <use href="/img/icons/sprite.svg#right-arrow"></use>
+                                    </svg>
+                                </div>
+                            </a>
+                        </div>
+                    <? endforeach; ?>
+                </div>
+            </div>
+</div> */ ?>
+        <!-- end hot-promo-->
+        <? if ($arResult['BANKI']): ?>
+            <!-- banks-->
+                <div class="banks">
+                <div class="container">
+                    <div class="banks__grid">
+                        <div class="banks__header">
+                            <p class="banks__title">Банки</p>
+                            <p class="banks__subtitle">Кредит и ипотека</p>
+                        </div>
+                        <? foreach ($arResult['BANKI'] as $arItem): ?>
+
+                            <div class="banks__item">
+                                <!-- bank-link-->
+                                <a class="bank-link" href="<?=$arItem['DETAIL_PAGE_URL'];?>">
+                                    <img src="<?=CFILE::GetPath($arItem['LOGO']);?>" alt="">
+                                        <p><?=$arItem['NAME'];?>
+                                        <? if ($arItem['SECOND_TEXT']): ?>
+                                            <span><?=$arItem['SECOND_TEXT'];?></span>
+                                        <? endif; ?>
+                                    </p>
+                                </a>
+                                <!-- end bank-link-->
+                            </div>
+
+                        <? endforeach; ?>
+                    </div>
+                </div>
+            </div>
+            <!-- end banks-->
+        <? endif; ?>
+        <!-- info-->
+        <div class="info">
+            <div class="container">
+                <div class="info__row">
+                    <div class="info__left"><a class="howorder__link js-modal-show js-modal-show-product" data-id="<?=$arResult['ID'];?>" href="#js-modal-callback"><span>Перезвоните мне</span>
+                            <svg>
+                                <use href="/img/icons/sprite.svg#smartphone_2"></use>
+                            </svg></a></div>
+                    <div class="info__right">
+                        <!-- howpay-->
+                        <ul class="howpay">
+                            <li>
+                                <a href="#">
+                                    <svg>
+                                        <use href="/img/icons/sprite.svg#three_coin"></use>
+                                    </svg><span>кредит</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <svg>
+                                        <use href="/img/icons/sprite.svg#clock_coin"></use>
+                                    </svg><span>Ипотека</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <svg>
+                                        <use href="/img/icons/sprite.svg#moms_capital"></use>
+                                    </svg><span>Материнский капитал</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <svg>
+                                        <use href="/img/icons/sprite.svg#tradeint_home"></use>
+                                    </svg><span>меняем <br> Квартиру на дом</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- end howpay-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end info-->
+    </div>
+    <div class="container">
+        <div class="p-finance__toggle">
+            <svg>
+                <use href="/img/icons/sprite.svg#arrow-up"></use>
+            </svg><span>Акции, банки, кредитование</span>
+            <svg>
+                <use href="/img/icons/sprite.svg#arrow-up"></use>
+            </svg>
+        </div>
+    </div>
+</div>
+<!-- end p-finance-->
+
+<?php if ($arResult['PROPERTIES']['BUILDED']['VALUE']): ?>
+    <!-- built-->
+    <div class="built">
+        <div class="container">
+            <div class="built__header">
+                <p class="built__title">Построенные дома</p>
+            </div>
+            <div class="built__gallery">
+                <div class="built__carousel">
+                    <?
+                        foreach ($arResult['PROPERTIES']['BUILDED']['VALUE'] as $arPhoto):
+                            $img = CFile::ResizeImageGet($arPhoto, array('width'=>863, 'height'=>863), BX_RESIZE_IMAGE_PROPORTIONAL, true);
+                        ?>
+                        <div class="item"><img src="<?=$img['src'];?>" alt=""></div>
+                    <? endforeach; ?>
+                </div>
+                <div class="built__thumbs">
+                    <?
+                        foreach ($arResult['PROPERTIES']['BUILDED']['VALUE'] as $arPhoto):
+                            $img = CFile::ResizeImageGet($arPhoto, array('width'=>130, 'height'=>124), BX_RESIZE_IMAGE_EXACT, true);
+                    ?>
+                        <div class="item"><img src="<?=$img['src'];?>" alt=""></div>
+                    <? endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end built-->
+<?php endif; ?>
+
+    <!-- equipment-->
+    <div class="equipment" id="equipment">
+        <div class="container">
+            <div class="equipment__row">
+                <div class="equipment__left">
+                    <div class="equipment__header">
+                        <h2 class="equipment__title">Комплектация</h2>
+                    </div>
+                    <!-- eq-contacts-->
+                    <div class="eq-contacts">
+                        <span class="eq-contacts__label"> Уточнить цену сейчас:</span>
+                            <a class="eq-contacts__msg" href="#">
+                                <svg>
+                                    <use href="/img/icons/sprite.svg#whatsapp"></use>
+                                </svg>
+                            </a>
+                            <a class="eq-contacts__msg" href="#">
+                                <svg>
+                                    <use href="/img/icons/sprite.svg#viber"></use>
+                                </svg>
+                            </a>
+                            <a class="eq-contacts__msg" href="#">
+                                <svg>
+                                    <use href="/img/icons/sprite.svg#telegram"></use>
+                                </svg>
+                            </a>
+                            <a class="eq-contacts__tel" href="tel:+79251010009">+7 925 101-00-09</a>
+                    </div>
+                    <!-- end eq-contacts-->
+                </div>
+                <div class="equipment__right">
+                    <p class="equipment__comment">
+                        <span>Комментарий:</span>  Представленные нами цены максимально возможно детализированы, однако требуют уточнения на момент подписания договора. На цену может повлиять как стоимость доставки, рыночная стоимость материалов, так и другие незначительные факторы.
+                    </p>
+                </div>
+            </div>
+
+    <?
+    $file_path = $_SERVER['DOCUMENT_ROOT'] . CFILE::GetPath($arResult['PROPERTIES']['FILE']['VALUE']);
+    $file_content = file_get_contents($file_path);
+
+    if ($file = fopen($file_path, "r")) {
+        $f_counter = 0;
+        ?>
+            <!-- eq-table-->
+            <div class="eq-table">
+                <div class="eq-table__header">
+                    <div class="eq-table__left">
+                        <p>Комплектации дома</p>
+                        <p>Размерность: <span><?=$arResult['PROPERTIES']['SIZE']['VALUE'];?> м</span></p>
+                    </div>
+                    <div class="eq-table__col">
+                        <p class="eq-table__name">Стандарт<span>Базовая комплектация для летнего проживания</span></p>
+                        <p class="eq-table__price">
+                            <? if ($arResult['PROPERTIES']['PRICE_DISCOUNT']['VALUE']): ?>
+                                <?=number_format($arResult['PROPERTIES']['PRICE_DISCOUNT']['VALUE'], 0, '.', ' ');?>
+                            <? else: ?>
+                                <?=number_format($arResult['PROPERTIES']['PRICE_STANDART']['VALUE'], 0, '.', ' ');?>
+                            <? endif; ?>
+                            <span>&#8381;</span></p>
+                    </div>
+                    <div class="eq-table__col">
+                        <p class="eq-table__name">Комфорт<span>Комплектация дома выдерживает легкие холода</span></p>
+                        <p class="eq-table__price"><?=number_format($arResult['PROPERTIES']['PRICE_COMFORT']['VALUE'], 0, '.', ' ');?> <span>&#8381;</span></p>
+                    </div>
+                    <div class="eq-table__col">
+                        <p class="eq-table__name">Премиум<span>Дом для круглогодичного проживания</span></p>
+                        <p class="eq-table__price"><?=number_format($arResult['PROPERTIES']['PRICE_PREMIUM']['VALUE'], 0, '.', ' ');?> <span>&#8381;</span></p>
+                    </div>
+                </div>
+                <div class="eq-table__body">
+                    <?
+
+                    while(!feof($file)) {
+                        $f_counter++;
+                        $line = fgets($file);
+
+                        //if (mb_substr($line, 0) == '|' && mb_substr($line, -1) == '|') continue;
+                        if (substr_count($line, '|') == 2)
+                        {
+                            ?>
+                            <div class="eq-table__title"> <span><?=str_ireplace('|', '', $line); ?></span></div>
+                            <?
+                            continue;
+                        }
+
+                        $explode_line = explode(';', $line);
+                        ?>
+
+                        <div class="eq-table__item">
+                            <div class="eq-table__left"><span><?=$explode_line[0];?></span></div>
+
+                            <div class="eq-table__col">
+                                <? if (trim(strtolower($explode_line[1])) == 'да'): ?>
+                                    <img src="/local/templates/main/img/check_icon.svg" width="28px" height="20px" alt="">
+                                <? else: ?>
+                                    <img src="/local/templates/main/img/cross_icon_black.svg" width="20px" height="20px" alt="">
+                                <? endif; ?>
+                            </div>
+
+                            <div class="eq-table__col">
+                                <? if (trim(strtolower($explode_line[2])) == 'да'): ?>
+                                    <img src="/local/templates/main/img/check_icon.svg" width="28px" height="20px" alt="">
+                                <? else: ?>
+                                    <img src="/local/templates/main/img/cross_icon_black.svg" width="20px" height="20px" alt="">
+                                <? endif; ?>
+                            </div>
+
+                            <div class="eq-table__col">
+                                <? if (trim(strtolower($explode_line[3])) == 'да'): ?>
+                                    <img src="/local/templates/main/img/check_icon.svg" width="28px" height="20px" alt="">
+                                <? else: ?>
+                                    <img src="/local/templates/main/img/cross_icon_black.svg" width="20px" height="20px" alt="">
+                                <? endif; ?>
+                            </div>
+                        </div>
+
+                    <?
+
+                }
+                ?>
+                </div>
+                <div class="eq-table__toggle">
+                    <svg>
+                        <use href="/img/icons/sprite.svg#arrow-up"></use>
+                    </svg><span class="close">Раскрыть таблицу <i>комплектаций</i></span><span class="open">Свернуть таблицу</span>
+                    <svg>
+                        <use href="/img/icons/sprite.svg#arrow-up"></use>
+                    </svg>
+                </div>
+                <div class="eq-table__footer">
+                    <div class="eq-table__left"><span>Стоимость проекта</span></div>
+                    <div class="eq-table__col">
+                        <p class="eq-table__name">Стандарт</p>
+                        <p class="eq-table__price">
+                            <? if ($arResult['PROPERTIES']['PRICE_DISCOUNT']['VALUE']): ?>
+                                <?=number_format($arResult['PROPERTIES']['PRICE_DISCOUNT']['VALUE'], 0, '.', ' ');?>
+                            <? else: ?>
+                                <?=number_format($arResult['PROPERTIES']['PRICE_STANDART']['VALUE'], 0, '.', ' ');?>
+                            <? endif; ?>
+                            <span>&#8381;</span></p>
+                        <a class="eq-table__btn" href="#">Выбрать</a>
+                    </div>
+                    <div class="eq-table__col">
+                        <p class="eq-table__name">Комфорт</p>
+                        <p class="eq-table__price"><?=number_format($arResult['PROPERTIES']['PRICE_COMFORT']['VALUE'], 0, '.', ' ');?> <span>&#8381;</span></p><a class="eq-table__btn" href="#">Выбрать</a>
+                    </div>
+                    <div class="eq-table__col">
+                        <p class="eq-table__name">Премиум</p>
+                        <p class="eq-table__price"><?=number_format($arResult['PROPERTIES']['PRICE_PREMIUM']['VALUE'], 0, '.', ' ');?> <span>&#8381;</span></p><a class="eq-table__btn" href="#">Выбрать</a>
+                    </div>
+                </div>
+            </div>
+        <?
+            fclose($file);
+    }
+        ?>
+
+            <!-- end eq-table-->
+            <!-- eq-selected-->
+            <div class="eq-selected">
+                <div class="eq-selected__left"><span>Выбраная комплектация</span></div>
+                <div class="eq-selected__center"><span class="eq-selected__name">Стандарт</span>
+                    <p class="eq-selected__price">
+                        <? if ($arResult['PROPERTIES']['PRICE_DISCOUNT']['VALUE']): ?>
+                            <?=number_format($arResult['PROPERTIES']['PRICE_DISCOUNT']['VALUE'], 0, '.', ' ');?>
+                        <? else: ?>
+                            <?=number_format($arResult['PROPERTIES']['PRICE_STANDART']['VALUE'], 0, '.', ' ');?>
+                        <? endif; ?>
+                    <span>&#8381;</span></p>
+                </div>
+                <div class="eq-selected__right"><a class="eq-selected__btn js-modal-show js-modal-show-product" data-id="<?=$arResult['ID'];?>" href="#js-modal-selected" data-id="<?=$arResult['ID'];?>"><img src="/img/icons/arrow-right-white.png" alt=""><span>отправить</span></a></div>
+            </div>
+            <!-- end eq-selected-->
+        </div>
+    </div>
+    <!-- end equipment-->
